@@ -1,5 +1,20 @@
 const puppeteer = require('puppeteer');
 
+
+async function getTotalProductsFromDaraz(){
+    try{
+        const data = (await Promise.all([getTotalLaptopsData(),getTotalGamingAccessoriesData(),getTotalMonitorsData()])).flat(Infinity);
+        return data;    
+    }catch(err){
+            console.log(err);
+            
+     }
+        
+ }
+    
+
+
+
 async function getTotalPages(url) {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -63,9 +78,10 @@ async function getTotalLaptopsData() {
 
     } catch (err) {
 
-        console.log(err);
-        return dataSet;
+        console.log(err , 'Error in daraz');
 
+        await browser.close()
+        return dataSet;
     }
 
 }
@@ -86,7 +102,7 @@ async function getTotalMonitorsData() {
     const dataSet = [];
     try {
         for (let i = 1; i <= totalPagestoNavigate; i++) {
-            console.log(i);
+            
             await page.goto(`https://www.daraz.pk/monitors/?page=${i}&spm=a2a0e.searchlistcategory.pagination.1.284e387cpwO6TR`);
             const dataArray = await page.evaluate(() => {
                 const data = [];
@@ -116,7 +132,8 @@ async function getTotalMonitorsData() {
 
     } catch (err) {
 
-        console.log(err);
+        
+        console.log(err , 'Error in daraz');       
         await browser.close();
         return dataSet;
     }
@@ -168,9 +185,14 @@ async function getTotalGamingAccessoriesData(){
 
     } catch (err) {
 
-        console.log(err);
+        console.log(err , 'Error in daraz');
         await browser.close();
         return dataSet;
     }
 
+}
+
+
+module.exports = {
+    getTotalProductsFromDaraz
 }
