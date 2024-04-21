@@ -4,10 +4,11 @@ const puppeteer = require('puppeteer');
 async function getTotalProductsFromDaraz(){
     try{
         const data = (await Promise.all([getTotalLaptopsData(),getTotalGamingAccessoriesData(),getTotalMonitorsData()])).flat(Infinity);
-        return data;    
+        return data; 
+           
     }catch(err){
             console.log(err);
-            
+            process.exit(1);        
      }
         
  }
@@ -20,6 +21,7 @@ async function getTotalPages(url) {
     const page = await browser.newPage();
 
     await page.goto(url);
+
     const totalPages = await page.evaluate(() => {
         const pages = document.querySelectorAll('.ant-pagination-item');
         return parseInt(pages[pages.length - 1].innerText);

@@ -29,12 +29,12 @@ async function getGamingPcData(){
         console.log(products[0].innerHTML)
         for(let product of products){
             data.push({
-                itemNo:i++,
                 category:'Gaming PC',
-                item:product.querySelector('.jet-woo-product-title').innerText,
+                link:product.querySelector('.jet-woo-product-title a').href,
+                productTitle:product.querySelector('.jet-woo-product-title').innerText,
                 price:String((product.querySelector('.jet-woo-product-price').innerText)).slice(1),
-                link:product.querySelector('.jet-woo-product-title a').href
-            })
+                
+            });
         }
 
         return data;
@@ -46,6 +46,7 @@ async function getGamingPcData(){
     }catch(err){
         console.log(err);
         await browser.close();
+        return data;
     }
 
 
@@ -86,6 +87,7 @@ async function getGraphicCardData(){
 }catch(err){
     console.log(err);
     await browser.close();
+    return data;
 }
 
 }
