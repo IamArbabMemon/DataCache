@@ -1,13 +1,9 @@
-const {configData} = require('../../config.js'); 
 const mongoose = require('mongoose');
-
-
-console.log(configData.get('MONGO_URL'));
 
 const connectDB = async ()=>{
     try{
         
-        await mongoose.connect(configData.get('MONGO_URL'));
+        await mongoose.connect('mongodb://127.0.0.1:27017/DataCache');
         console.log('DATABASE HAS BEEN CONNECTED ');
 
     }catch(err){
@@ -15,7 +11,6 @@ const connectDB = async ()=>{
         process.exit(1);
     }
 };
-
 
 
 module.exports = {connectDB};
