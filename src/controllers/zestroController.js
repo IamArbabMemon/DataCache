@@ -1,57 +1,33 @@
 const {zestroModel} = require('../models/dataModels.js');
-const {connectDB} = require('../db/index.js');
 
 async function getAllData(req,res){
   
-    const data = await zestroModel.find({});
-    return data;
+  try{
+    const categories = ['Graphic Cards','Processors','Gaming PC'];
+    const queryObj = req.query;
+    let data;
+  
+    if(Object.keys(queryObj).length===0){
+       data = await zestroModel.find({});
+      return res.status(200).json(data);
+    }
 
+    if(queryObj.category && categories.includes(queryObj.category)){
+    data = await zestroModel.find({category:queryObj.category});
+    return res.status(200).json(data);
+  }else{
+    return res.status(404).json({error:'Category not found'});
+  }
+
+
+  }catch(err){
+    console.log(err);
+    return res.status(500).json({error:err});
+
+  }
+    
 };
 
-
-
-async function getCategoryData(req,res){
-    try{
-
-    }catch(err){
-        
-    }
-}
-
-
-(
-    async()=>{
-
-        try{
-
-          const connection = await connectDB();
-            //const data = await getAllData();
-            const data = await zestroModel.aggregate([
- 
-            {
-                $group: {
-                  _id: "$category",  // Group by category
-                  count: { $sum: 1 }  // Count the occurrences of each category
-                }
-              },
-              {
-                $project: {
-                  _id: 0,  // Exclude _id field from output
-                  category: "$_id",  // Rename _id to category
-                  count: 1  // Include the count field
-                }
-              }
-        ]);
-
-        console.log(data);
-
-
-
-        }catch(err){
-
-        }finally{
-          
-        }
-
-    }
-)();
+module.exports = {
+  getAllData
+};
